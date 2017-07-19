@@ -1,81 +1,42 @@
 package br.ufscar.p2pchat;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.CONTACT_IP_COLUMN;
+import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.CONTACT_NAME_COLUMN;
 
-import br.ufscar.p2pchat.objects.Contact;
 
-class ContactViewHolder {
-
-    final TextView tvName;
-    final TextView tvIp;
-
-    public ContactViewHolder(View view) {
-        tvName = (TextView) view.findViewById(R.id.name);
-        tvIp = (TextView) view.findViewById(R.id.ip);
-    }
-
-}
-
-public class ContactListAdapter extends BaseAdapter {
+public class ContactListAdapter extends CursorAdapter {
 
     private final Context mContext;
-    private ArrayList<Contact> mData = new ArrayList<Contact>();
     private LayoutInflater mInflater;
 
-    public ContactListAdapter(Context context, ArrayList<Contact> contacts) {
-        super();
-        mData = contacts;
+    public ContactListAdapter(Context context,Cursor cursor) {
+        super(context,cursor,true);
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void addItem(final Contact item) {
-        mData.add(item);
-        notifyDataSetChanged();
-    }
-
-
     @Override
-    public int getCount() {
-        return mData.size();
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        return mInflater.inflate(R.layout.contact_row, parent, false);
     }
 
     @Override
-    public Contact getItem(int position) {
-        return mData.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position,
-                        View convertView, ViewGroup parent) {
-
-        View view;
-        ContactViewHolder holder;
-
-        if( convertView == null) {
-            view = mInflater.inflate(R.layout.contact_row, parent, false);
-            holder = new ContactViewHolder(view);
-            view.setTag(holder);
-        } else {
-            view = convertView;
-            holder = (ContactViewHolder) view.getTag();
-        }
-        Contact contact = (Contact) getItem(position);
-        holder.tvName.setText(contact.getName());
-        holder.tvIp.setText(contact.getIP());
-
-        return view;
+    public void bindView(View view, Context context, Cursor cursor) {
+        TextView tvName = (TextView) view.findViewById(R.id.name);
+        TextView tvIp = (TextView) view.findViewById(R.id.ip);
+        // Extract properties from cursor
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME_COLUMN));
+        String ip = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_IP_COLUMN));
+        // Populate fields with extracted properties
+        tvName.setText(name);
+        tvIp.setText(ip);
     }
 }

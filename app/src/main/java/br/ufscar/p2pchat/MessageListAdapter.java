@@ -1,81 +1,47 @@
 package br.ufscar.p2pchat;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import br.ufscar.p2pchat.objects.Message;
 
-class MessageViewHolder {
+import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.MESSAGE_CONTENT_COLUMN;
+import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.MESSAGE_IP_COLUMN;
 
-    final TextView tvContent;
-    final TextView tvIp;
-
-    public MessageViewHolder(View view) {
-        tvContent = (TextView) view.findViewById(R.id.name);
-        tvIp = (TextView) view.findViewById(R.id.ip);
-    }
-
-}
-
-public class MessageListAdapter extends BaseAdapter {
+public class MessageListAdapter extends CursorAdapter {
 
     private final Context mContext;
-    private ArrayList<Message> mData = new ArrayList<Message>();
     private LayoutInflater mInflater;
 
-    public MessageListAdapter(Context context, ArrayList<Message> messages) {
-        super();
-        mData = messages;
+    public MessageListAdapter(Context context,Cursor cursor) {
+        super(context,cursor,true);
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void addItem(final Message item) {
-        mData.add(item);
-        notifyDataSetChanged();
-    }
-
 
     @Override
-    public int getCount() {
-        return mData.size();
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        return mInflater.inflate(R.layout.contact_row, parent, false);
     }
 
     @Override
-    public Message getItem(int position) {
-        return mData.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position,
-                        View convertView, ViewGroup parent) {
-
-        View view;
-        MessageViewHolder holder;
-
-        if( convertView == null) {
-            view = mInflater.inflate(R.layout.contact_row, parent, false);
-            holder = new MessageViewHolder(view);
-            view.setTag(holder);
-        } else {
-            view = convertView;
-            holder = (MessageViewHolder) view.getTag();
-        }
-        Message message = (Message) getItem(position);
-        holder.tvContent.setText(message.getContent());
-        holder.tvIp.setText(message.getIP());
-
-        return view;
+    public void bindView(View view, Context context, Cursor cursor) {
+        TextView tvContent = (TextView) view.findViewById(R.id.name);
+        TextView tvIp = (TextView) view.findViewById(R.id.ip);
+        // Extract properties from cursor
+        String content = cursor.getString(cursor.getColumnIndexOrThrow(MESSAGE_CONTENT_COLUMN));
+        String ip = cursor.getString(cursor.getColumnIndexOrThrow(MESSAGE_IP_COLUMN));
+        // Populate fields with extracted properties
+        tvContent.setText(content);
+        tvIp.setText(ip);
     }
 }

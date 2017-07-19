@@ -147,6 +147,17 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         return contacts;
     }
 
+    public Cursor getAllContactsCursor() {
+        ArrayList<Contact> contacts = new ArrayList<Contact>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + CONTACT_TABLE;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery(query, null);
+    }
+
     public void deleteContact(int id) {
 
         // 1. get reference to writable DB
@@ -241,6 +252,17 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         // return books
         return messages;
+    }
+
+    public Cursor getAllMessagesCursor() {
+        ArrayList<Message> messages = new ArrayList<Message>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + MESSAGE_TABLE;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery(query, null);
     }
 
     public void deleteMessage(int id) {
