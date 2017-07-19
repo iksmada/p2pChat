@@ -9,27 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by adamski on 18/07/2017.
- */
-
-class Message{
-    private String content;
-    private String IP;
-
-    Message(String content,String IP){
-        this.content = content;
-        this.IP = IP;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getIP() {
-        return IP;
-    }
-}
+import br.ufscar.p2pchat.objects.Message;
 
 class MessageViewHolder {
 

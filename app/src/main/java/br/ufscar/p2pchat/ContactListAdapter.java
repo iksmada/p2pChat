@@ -9,27 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by adamski on 18/07/2017.
- */
-
-class Contact{
-    private String name;
-    private String IP;
-
-    Contact(String name,String IP){
-        this.name = name;
-        this.IP = IP;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getIP() {
-        return IP;
-    }
-}
+import br.ufscar.p2pchat.objects.Contact;
 
 class ContactViewHolder {
 
