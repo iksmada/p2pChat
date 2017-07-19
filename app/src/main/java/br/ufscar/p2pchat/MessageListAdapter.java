@@ -13,17 +13,17 @@ import java.util.ArrayList;
  * Created by adamski on 18/07/2017.
  */
 
-class Contact{
-    private String name;
+class Message{
+    private String content;
     private String IP;
 
-    Contact(String name,String IP){
-        this.name = name;
+    Message(String content,String IP){
+        this.content = content;
         this.IP = IP;
     }
 
-    public String getName() {
-        return name;
+    public String getContent() {
+        return content;
     }
 
     public String getIP() {
@@ -31,32 +31,32 @@ class Contact{
     }
 }
 
-class ContactViewHolder {
+class MessageViewHolder {
 
-    final TextView tvName;
+    final TextView tvContent;
     final TextView tvIp;
 
-    public ContactViewHolder(View view) {
-        tvName = (TextView) view.findViewById(R.id.name);
+    public MessageViewHolder(View view) {
+        tvContent = (TextView) view.findViewById(R.id.name);
         tvIp = (TextView) view.findViewById(R.id.ip);
     }
 
 }
 
-public class ContactListAdapter extends BaseAdapter {
+public class MessageListAdapter extends BaseAdapter {
 
     private final Context mContext;
-    private ArrayList<Contact> mData = new ArrayList<Contact>();
+    private ArrayList<Message> mData = new ArrayList<Message>();
     private LayoutInflater mInflater;
 
-    public ContactListAdapter(Context context, ArrayList<Contact> contacts) {
+    public MessageListAdapter(Context context, ArrayList<Message> messages) {
         super();
-        mData = contacts;
+        mData = messages;
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void addItem(final Contact item) {
+    public void addItem(final Message item) {
         mData.add(item);
         notifyDataSetChanged();
     }
@@ -68,7 +68,7 @@ public class ContactListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Contact getItem(int position) {
+    public Message getItem(int position) {
         return mData.get(position);
     }
 
@@ -82,19 +82,19 @@ public class ContactListAdapter extends BaseAdapter {
                         View convertView, ViewGroup parent) {
 
         View view;
-        ContactViewHolder holder;
+        MessageViewHolder holder;
 
         if( convertView == null) {
             view = mInflater.inflate(R.layout.contact_row, parent, false);
-            holder = new ContactViewHolder(view);
+            holder = new MessageViewHolder(view);
             view.setTag(holder);
         } else {
             view = convertView;
-            holder = (ContactViewHolder) view.getTag();
+            holder = (MessageViewHolder) view.getTag();
         }
-        Contact contact = (Contact) getItem(position);
-        holder.tvName.setText(contact.getName());
-        holder.tvIp.setText(contact.getIP());
+        Message message = (Message) getItem(position);
+        holder.tvContent.setText(message.getContent());
+        holder.tvIp.setText(message.getIP());
 
         return view;
     }
