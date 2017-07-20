@@ -5,16 +5,11 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import br.ufscar.p2pchat.objects.Message;
-
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.MESSAGE_CONTENT_COLUMN;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.MESSAGE_IP_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.MESSAGE_CONTENT_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.MESSAGE_IP_COLUMN;
 
 public class MessageListAdapter extends CursorAdapter {
 

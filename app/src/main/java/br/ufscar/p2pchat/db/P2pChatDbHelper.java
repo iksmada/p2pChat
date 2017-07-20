@@ -13,18 +13,18 @@ import br.ufscar.p2pchat.objects.Contact;
 import br.ufscar.p2pchat.objects.Message;
 
 import static android.provider.BaseColumns._ID;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.CONTACT_IP_COLUMN;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.CONTACT_NAME_COLUMN;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.CONTACT_TABLE;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.MESSAGE_CONTENT_COLUMN;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.MESSAGE_IP_COLUMN;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.MESSAGE_TABLE;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.CONTACT_IP_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.CONTACT_NAME_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.CONTACT_TABLE;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.MESSAGE_CONTENT_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.MESSAGE_IP_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.MESSAGE_TABLE;
 
 /**
  * Created by rapha on 18/07/2017.
  */
 
-public class FeedReaderDbHelper extends SQLiteOpenHelper {
+public class P2pChatDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_CONTACTS =
             "CREATE TABLE " + CONTACT_TABLE + " (" +
@@ -33,22 +33,22 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     CONTACT_IP_COLUMN + " TEXT)";
 
     private static final String SQL_CREATE_MESSAGES =
-            "CREATE TABLE " + FeedReaderContract.FeedEntry.MESSAGE_TABLE + " (" +
-                    FeedReaderContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
-                    FeedReaderContract.FeedEntry.MESSAGE_CONTENT_COLUMN + " TEXT," +
-                    FeedReaderContract.FeedEntry.MESSAGE_IP_COLUMN + " TEXT)";
+            "CREATE TABLE " + P2pChatContract.FeedEntry.MESSAGE_TABLE + " (" +
+                    P2pChatContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
+                    P2pChatContract.FeedEntry.MESSAGE_CONTENT_COLUMN + " TEXT," +
+                    P2pChatContract.FeedEntry.MESSAGE_IP_COLUMN + " TEXT)";
 
     private static final String SQL_DELETE_CONTACTS =
             "DROP TABLE IF EXISTS " + CONTACT_TABLE;
 
     private static final String SQL_DELETE_MESSAGES =
-            "DROP TABLE IF EXISTS " + FeedReaderContract.FeedEntry.MESSAGE_TABLE;
+            "DROP TABLE IF EXISTS " + P2pChatContract.FeedEntry.MESSAGE_TABLE;
 
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "FeedReader.db";
 
-    public FeedReaderDbHelper(Context context) {
+    public P2pChatDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     public void onCreate(SQLiteDatabase db) {

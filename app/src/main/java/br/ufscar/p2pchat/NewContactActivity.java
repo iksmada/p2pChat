@@ -10,6 +10,8 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -65,6 +67,13 @@ public class NewContactActivity extends Activity {
         mAdapter = new PeerListAdapter(this, (ArrayList<WifiP2pDevice>) peers);
 // Attach cursor adapter to the ListView
         lvItems.setAdapter(mAdapter);
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                
+            }
+        });
 
     }
 

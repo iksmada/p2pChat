@@ -6,10 +6,10 @@ import android.provider.BaseColumns;
  * Created by rapha on 18/07/2017.
  */
 
-public class FeedReaderContract {
+public class P2pChatContract {
     // To prevent someone from accidentally instantiating the contract class,
     // make the constructor private.
-    private FeedReaderContract() {}
+    private P2pChatContract() {}
 
     /* Inner class that defines the table contents */
     public static class FeedEntry implements BaseColumns {

@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.CONTACT_IP_COLUMN;
-import static br.ufscar.p2pchat.db.FeedReaderContract.FeedEntry.CONTACT_NAME_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.CONTACT_IP_COLUMN;
+import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.CONTACT_NAME_COLUMN;
 
 
 public class ContactListAdapter extends CursorAdapter {
