@@ -24,7 +24,7 @@ public class NewContactActivity extends Activity {
     private WiFiDirectBroadcastReceiver mReceiver;
     private Boolean isWifiP2pEnabled = false;
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-    private br.ufscar.p2pchat.PeerListAdapter mAdapter = null;
+    private PeerListAdapter mAdapter = null;
     private ListView lvItems= null;
 
 
