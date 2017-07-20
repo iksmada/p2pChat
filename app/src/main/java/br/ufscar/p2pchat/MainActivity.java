@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final Intent intent = new Intent(this, WriteMessageActivity.class);
+        //final Intent int_addContact = new Intent(this,colocar a class)
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -28,6 +29,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        /*
+        FloatingActionButton fab_AddContact = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //COLCOAR SUA AÇÂO AQUI
+                startActivity(int_addContact);
+            }
+        });*/
     }
 
     public void startMessagesActivity(View v){
