@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_newContact);
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fabNewContact);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view2) {
