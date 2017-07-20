@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final Intent intent = new Intent(this, WriteMessageActivity.class);
-        final Intent int_newContact = new Intent(this, NewContactActivity.class);
+        final Intent intNewContact = new Intent(this, NewContactActivity.class);
+        final Intent intMsgReceived = new Intent(this, MessagesReceivedActivity.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,7 +37,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view2) {
                 //COLCOAR SUA AÇÂO AQUI
-                startActivity(int_newContact);
+                startActivity(intNewContact);
+            }
+        });
+
+        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fabMessagesReceived);
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view3) {
+                //COLCOAR SUA AÇÂO AQUI
+                startActivity(intMsgReceived);
             }
         });
     }

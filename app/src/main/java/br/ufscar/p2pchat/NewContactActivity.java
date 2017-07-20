@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
-import br.ufscar.p2pchat.PeerListAdapter;
 
 public class NewContactActivity extends Activity {
 
