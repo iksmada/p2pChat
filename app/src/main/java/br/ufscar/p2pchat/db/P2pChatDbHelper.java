@@ -27,13 +27,13 @@ import static br.ufscar.p2pchat.db.P2pChatContract.FeedEntry.MESSAGE_TABLE;
 public class P2pChatDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_CONTACTS =
-            "CREATE TABLE " + CONTACT_TABLE + " (" +
+            "CREATE TABLE IF NOT EXISTS " + CONTACT_TABLE + " (" +
                     _ID + " INTEGER PRIMARY KEY," +
                     CONTACT_NAME_COLUMN + " TEXT," +
                     CONTACT_IP_COLUMN + " TEXT)";
 
     private static final String SQL_CREATE_MESSAGES =
-            "CREATE TABLE " + P2pChatContract.FeedEntry.MESSAGE_TABLE + " (" +
+            "CREATE TABLE IF NOT EXISTS " + P2pChatContract.FeedEntry.MESSAGE_TABLE + " (" +
                     P2pChatContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
                     P2pChatContract.FeedEntry.MESSAGE_CONTENT_COLUMN + " TEXT," +
                     P2pChatContract.FeedEntry.MESSAGE_IP_COLUMN + " TEXT)";

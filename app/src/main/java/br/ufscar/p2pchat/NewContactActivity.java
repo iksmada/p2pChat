@@ -13,9 +13,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.ufscar.p2pchat.db.P2pChatDbHelper;
+import br.ufscar.p2pchat.objects.Contact;
 
 public class NewContactActivity extends Activity {
 
@@ -28,12 +32,14 @@ public class NewContactActivity extends Activity {
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private PeerListAdapter mAdapter = null;
     private ListView lvItems= null;
+    private Context mContext = null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_contact);
+        mContext = this;
         //  Indicates a change in the Wi-Fi P2P status.
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         // Indicates a change in the list of available peers.
@@ -42,6 +48,8 @@ public class NewContactActivity extends Activity {
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         // Indicates this device's details have changed.
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        final P2pChatDbHelper dbHelper = new P2pChatDbHelper(this);
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
@@ -71,7 +79,11 @@ public class NewContactActivity extends Activity {
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                
+                WifiP2pDevice device = mAdapter.getItem(position);
+                dbHelper.addContact(new Contact(device.deviceName,device.deviceAddress));
+
+                Toast.makeText(mContext,"Added " + device.deviceName,Toast.LENGTH_LONG).show();
+
             }
         });
 
