@@ -23,6 +23,6 @@
         android:text="Messagens"
         android:onClick="startMessagesActivity"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>
