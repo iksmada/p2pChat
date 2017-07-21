@@ -8,16 +8,17 @@
     tools:context="br.ufscar.p2pchat.WriteMessageActivity">
 
     <TextView
-        android:id="@+id/txtWriteMessage"
+        android:id="@+id/instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Escreva a mensagem"
         android:textSize="@dimen/fab_margin"/>
     <EditText
+        android:id="@+id/write_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtWriteMessage"/>
+        android:layout_below="@id/instructions"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
