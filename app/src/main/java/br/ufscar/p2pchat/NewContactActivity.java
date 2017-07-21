@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +28,7 @@ public class NewContactActivity extends Activity {
     private final IntentFilter intentFilter = new IntentFilter();
     private WifiP2pManager.Channel mChannel;
     private WifiP2pManager mManager;
-    private WiFiDirectBroadcastReceiver mReceiver;
+    private WiFiP2pBroadcastReceiver mReceiver;
     private Boolean isWifiP2pEnabled = false;
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private PeerListAdapter mAdapter = null;
@@ -44,31 +45,11 @@ public class NewContactActivity extends Activity {
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         // Indicates a change in the list of available peers.
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        // Indicates the state of Wi-Fi P2P connectivity has changed.
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        // Indicates this device's details have changed.
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         final P2pChatDbHelper dbHelper = new P2pChatDbHelper(this);
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
-
-            @Override
-            public void onSuccess() {
-                // Code for when the discovery initiation is successful goes here.
-                // No services have actually been discovered yet, so this method
-                // can often be left blank.  Code for peer discovery goes in the
-                // onReceive method, detailed below.
-            }
-
-            @Override
-            public void onFailure(int reasonCode) {
-                // Code for when the discovery initiation fails goes here.
-                // Alert the user that something went wrong.
-            }
-        });
 
         lvItems = (ListView) findViewById(R.id.listview);
 // Setup cursor adapter using cursor from last step
@@ -80,6 +61,7 @@ public class NewContactActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 WifiP2pDevice device = mAdapter.getItem(position);
+                dbHelper.deleteContact(device.deviceName);
                 dbHelper.addContact(new Contact(device.deviceName,device.deviceAddress));
 
                 Toast.makeText(mContext,"Added " + device.deviceName,Toast.LENGTH_LONG).show();
@@ -90,7 +72,7 @@ public class NewContactActivity extends Activity {
     }
 
 
-    private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
+    private PeerListListener peerListListener = new PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
 
@@ -117,7 +99,7 @@ public class NewContactActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mReceiver = new WiFiDirectBroadcastReceiver();
+        mReceiver = new WiFiP2pBroadcastReceiver();
         registerReceiver(mReceiver, intentFilter);
 
         if (mManager != null) {
@@ -128,6 +110,8 @@ public class NewContactActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        unregisterReceiver(mReceiver);
     }
 
 
@@ -135,7 +119,7 @@ public class NewContactActivity extends Activity {
         this.isWifiP2pEnabled = isWifiP2pEnabled;
     }
 
-    public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
+    public class WiFiP2pBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -154,15 +138,6 @@ public class NewContactActivity extends Activity {
                     mManager.requestPeers(mChannel, peerListListener);
                 }
                 Log.d(TAG, "P2P peers changed");
-
-            } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
-
-                // Connection state changed!  We should probably do something about
-                // that.
-
-            } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-
-                //My device changed
 
             }
         }

@@ -129,7 +129,6 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        db.close();
         // 3. go over each row, build book and add it to list
         Contact contact = null;
         if (cursor.moveToFirst()) {
@@ -141,6 +140,8 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        db.close();
+        db.close();
 
         Log.d("getAllContacts()", contacts.toString());
         // return books
@@ -171,6 +172,21 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
         db.close();
         //log
         Log.d("deleteContact", String.valueOf(id) );
+    }
+
+    public void deleteContact(String name) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(CONTACT_TABLE, //table name
+                CONTACT_NAME_COLUMN+" = ?",  // selections
+                new String[] { name }); //selections args
+        // 3. close
+        db.close();
+        //log
+        Log.d("deleteContact", name );
     }
 
     public void addMessage(Message message){
