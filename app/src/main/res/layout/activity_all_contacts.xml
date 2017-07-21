@@ -8,21 +8,21 @@
     tools:context="br.ufscar.p2pchat.MessagesReceivedActivity">
 
     <TextView
-        android:id="@+id/txtMessagesReceived"
+        android:id="@+id/txt_messages_received"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Mensagens Recebidas"
+        android:text="Todos Contatos"
         android:textSize="@dimen/fab_margin" />
 
     <ListView
-        android:id="@+id/lvMessagesReceived"
-        android:layout_below="@id/txtMessagesReceived"
+        android:id="@+id/lv_contacts"
+        android:layout_below="@id/txt_messages_received"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        android:divider="#d1d1d1" />
+        android:divider="#d1d1d1"/>
 </RelativeLayout>

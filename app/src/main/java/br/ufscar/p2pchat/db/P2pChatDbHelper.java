@@ -33,10 +33,10 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
                     CONTACT_IP_COLUMN + " TEXT)";
 
     private static final String SQL_CREATE_MESSAGES =
-            "CREATE TABLE IF NOT EXISTS " + P2pChatContract.FeedEntry.MESSAGE_TABLE + " (" +
-                    P2pChatContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
-                    P2pChatContract.FeedEntry.MESSAGE_CONTENT_COLUMN + " TEXT," +
-                    P2pChatContract.FeedEntry.MESSAGE_IP_COLUMN + " TEXT)";
+            "CREATE TABLE IF NOT EXISTS " + MESSAGE_TABLE + " (" +
+                    _ID + " INTEGER PRIMARY KEY," +
+                    MESSAGE_CONTENT_COLUMN + " TEXT," +
+                    MESSAGE_IP_COLUMN + " TEXT)";
 
     private static final String SQL_DELETE_CONTACTS =
             "DROP TABLE IF EXISTS " + CONTACT_TABLE;
@@ -116,6 +116,7 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
 
             cursor.close();
         }
+        db.close();
         // 5. return book
         return contact;
     }
@@ -141,7 +142,6 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         db.close();
-        db.close();
 
         Log.d("getAllContacts()", contacts.toString());
         // return books
@@ -149,13 +149,11 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllContactsCursor() {
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
-
         // 1. build the query
         String query = "SELECT  * FROM " + CONTACT_TABLE;
 
         // 2. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(query, null);
     }
 
@@ -239,6 +237,8 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
             Log.d("getMessage(" + id + ")", message.toString());
             cursor.close();
         }
+
+        db.close();
         // 5. return book
         return message;
     }
@@ -264,6 +264,8 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
+        db.close();
+
         Log.d("getAllMessages()", messages.toString());
 
         // return books
@@ -271,13 +273,11 @@ public class P2pChatDbHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllMessagesCursor() {
-        ArrayList<Message> messages = new ArrayList<Message>();
-
         // 1. build the query
         String query = "SELECT  * FROM " + MESSAGE_TABLE;
 
         // 2. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(query, null);
     }
 

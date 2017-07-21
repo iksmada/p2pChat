@@ -20,6 +20,7 @@ import android.view.MenuItem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         final Intent intent = new Intent(this, WriteMessageActivity.class);
         final Intent intNewContact = new Intent(this, NewContactActivity.class);
         final Intent intMsgReceived = new Intent(this, MessagesReceivedActivity.class);
+        final Intent intViewContacs = new Intent(this, AllContactsActivity.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton fabViewContacts = (FloatingActionButton) findViewById(R.id.fabViewContacts);
+        fabViewContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intViewContacs);
+            }
+        });
+
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
@@ -94,13 +104,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        IntentFilter intentFilter = new IntentFilter();
-        // Indicates the state of Wi-Fi P2P connectivity has changed.
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        // Indicates this device's details have changed.
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-        mReceiver = new WiFiConnectionBroadcastReceiver();
-        registerReceiver(mReceiver, intentFilter);
+
 
         dbHelper = new P2pChatDbHelper(this);
     }
@@ -128,8 +132,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        // Indicates the state of Wi-Fi P2P connectivity has changed.
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        // Indicates this device's details have changed.
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        mReceiver = new WiFiConnectionBroadcastReceiver();
+        registerReceiver(mReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         unregisterReceiver(mReceiver);
     }
 
@@ -137,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
+            Log.d(TAG,"ReceiveMessegeAsyncTask");
             try {
                 /**
                  * Create a server socket and wait for client connections. This
@@ -186,8 +203,45 @@ public class MainActivity extends AppCompatActivity {
 
                     mManager.requestConnectionInfo(mChannel, new WifiP2pManager.ConnectionInfoListener() {
                         @Override
-                        public void onConnectionInfoAvailable(WifiP2pInfo info) {
-                            new ReceiveMessegeAsyncTask().execute();
+                        public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+
+                            // InetAddress from WifiP2pInfo struct.
+                            InetAddress groupOwnerAddress = info.groupOwnerAddress;
+
+                            // After the group negotiation, we can determine the group owner
+                            // (server).
+                            if (info.groupFormed && info.isGroupOwner) {
+                                Log.d(TAG,"im owner and im receiving");
+                                new ReceiveMessegeAsyncTask().execute();
+                                // Do whatever tasks are specific to the group owner.
+                                // One common case is creating a group owner thread and accepting
+                                // incoming connections.
+                            } else if (info.groupFormed) {
+                                Log.d(TAG,"im not owner and receiving, ops");
+                                mManager.requestConnectionInfo(mChannel, new WifiP2pManager.ConnectionInfoListener() {
+                                    @Override
+                                    public void onConnectionInfoAvailable(WifiP2pInfo info) {
+                                        if (info.groupFormed) {
+                                            mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    Log.d(TAG, "RemoveGroup successful");
+                                                }
+
+                                                @Override
+                                                public void onFailure(int reason) {
+
+                                                    Log.d(TAG, "RemoveGroup fail");
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                                // The other device acts as the peer (client). In this case,
+                                // you'll want to create a peer thread that connects
+                                // to the group owner.
+                            }
                         }
                     });
                 }
